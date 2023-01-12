@@ -5,6 +5,10 @@
         <div class="card-content">
             <div class="content">
                 {{ note.content }}
+                
+                <div class="has-text-right has-text-grey-light mt-2">
+                    <small>{{ characterLength }}</small>
+                </div>
             </div>
         </div>
         <footer class="card-footer">
@@ -16,11 +20,21 @@
 </template>
 
 <script setup>
+
+import {computed} from 'vue'
+
 const props = defineProps({
     note: {
         type: Object,
         required: true
         }
 })
+
+const characterLength = computed(() => {
+    const len = props.note.content.length
+    if ( len === 1) return len + ' character'
+    return len + ' characters'
+})
+
 
 </script>
