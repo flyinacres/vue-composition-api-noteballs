@@ -23,9 +23,8 @@
         </div>
 
         <Note 
-            @deleteClicked="deleteNote"
-            v-for="note in notes" 
-            :key ="notes.id"
+            v-for="note in storeNotes.notes" 
+            :key ="storeNotes.notes.id"
             :note="note"
         />
     </div>
@@ -34,38 +33,21 @@
 <script setup>
 import { ref } from 'vue'
 import Note from '@/components/Notes/Note.vue'
+import { useStoreNotes } from '@/stores/storeNotes'
 
 const newNote = ref('')
 
 // Even though I added the ref on the text component, I still have to add this ref or it
 // cannot be accessed
 const newNoteRef = ref(null)
-const notes = ref([
 
-]
-)
+const storeNotes = useStoreNotes()
 
 const addNote = () => {
-
-    let currentDate = new Date().getTime()
-    let id = currentDate.toString()
-
-    let note = {
-        id: id,
-        content: newNote.value
-    }
-
-    notes.value.unshift(note)
+    storeNotes.addNote(newNote.value)
+    
     newNote.value = ''
     newNoteRef.value.focus()
-}
-
-const deleteNote = (idToDelete) => {
-    notes.value = notes.value.filter(
-        note => {
-            return note.id != idToDelete
-        }
-    )
 }
 
 </script>
