@@ -3,6 +3,7 @@
 
         <AddEditNote 
             ref="addEditNoteRef"
+            placeHOlder="Add a new note"
             v-model="newNote">
             <template #buttons>
                 <button 
