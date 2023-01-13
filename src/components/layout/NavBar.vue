@@ -15,6 +15,7 @@
                 <a 
                     @click.prevent="showMobileNav = !showMobileNav"
                     role="button" 
+                    ref="navBarBurger"
                     class="navbar-burger" 
                     :class="{ 'is-active' : showMobileNav }"
                     aria-label="menu" 
@@ -27,6 +28,7 @@
             </div>
 
             <div 
+                ref="navbarMenuRef"
                 id="navbarBasicExample" 
                 class="navbar-menu"
                 :class="{ 'is-active' : showMobileNav }">
@@ -56,8 +58,21 @@
 
 <script setup>
 import {ref} from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
+// Need this to access the ref in the template. True for all the refs
+const navbarMenuRef = ref(null)
 const showMobileNav = ref(false)
+const navBarBurger = ref(false)
+
+
+onClickOutside(navbarMenuRef, 
+    () => { showMobileNav.value = false },
+    { 
+        ignore: [navBarBurger]
+    }
+)
+
 </script>
 
 <style>
