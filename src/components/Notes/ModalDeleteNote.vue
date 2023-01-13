@@ -1,7 +1,7 @@
 <template>
-    <div class="modal is-active">
+    <div class="modal is-active p-2">
     <div class="modal-background"></div>
-    <div class="modal-card">
+    <div class="modal-card" ref="modalCardRef">
         <header class="modal-card-head">
         <p class="modal-card-title">Delete Note?</p>
         <button 
@@ -27,6 +27,8 @@
 
 
 <script setup>
+import { onClickOutside } from '@vueuse/core'
+import { ref, onMounted, onUnmounted} from 'vue'
 
 const props = defineProps({
     modelValue: {
@@ -41,4 +43,23 @@ const closeModal = () => {
     emit('update:modelValue', false)
 }
 
+const modalCardRef = ref(null)
+
+onClickOutside(modalCardRef, closeModal)
+
+const handleKeyboard = e => {
+    if (e.key === 'Escape') {
+        closeModal()
+    }    
+}
+
+// Listen for the escape key
+onMounted(() => {
+    document.addEventListener('keyup', handleKeyboard)
+})
+
+// Remove the listener or it will be there forever
+onUnmounted(() => {
+    document.removeEventListener('keyup', handleKeyboard)
+})
 </script>
