@@ -25,6 +25,16 @@
 <script setup>
 import AddEditNote from '@/components/Notes/AddEditNote.vue'
 import {ref} from 'vue'
+import {useStoreNotes} from '@/stores/storeNotes'
+import {storeToRefs} from 'pinia'
 
+const storeNotes = useStoreNotes()
 const noteContent = ref('')
+
+const {getNoteContent} = storeToRefs(storeNotes)
+noteContent.value = getNoteContent.value
+
+
+
+
 </script>
