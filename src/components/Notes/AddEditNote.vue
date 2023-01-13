@@ -12,6 +12,7 @@
             <div class="control">
                 <textarea 
                     :value="props.modelValue"
+                    v-autofocus
                     @input="$emit('update:modelValue', $event.target.value)"
                     class="textarea" 
                     ref="textAreaRef"
@@ -60,4 +61,11 @@ const focusTextArea = () => {
 defineExpose({
     focusTextArea
 })
+
+// must start with v
+const vAutofocus = {
+    mounted: (el) => {
+        el.focus()
+    }
+}
 </script>
