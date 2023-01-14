@@ -2,13 +2,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { collection, onSnapshot, 
-    setDoc, doc, deleteDoc, updateDoc, 
+    addDoc, doc, deleteDoc, updateDoc, 
     query, orderBy  } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
 
 // The collection I will be using for all my firebase work
 const notesCollectionRef = collection(db, 'notes')
-const notesCollectionQuery = query(notesCollectionRef, orderBy('id', 'desc'));
+const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
 
 export const useStoreNotes = defineStore('storeNotes', {
 state: () => {
@@ -22,10 +22,12 @@ actions: {
             let notes = []
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
+                let date = doc.data().date
                 let id = doc.id
                 let content = doc.data().content
                 let note = {
                         id,
+                        date,
                         content: content
                     }
                 notes.push(note)
@@ -36,22 +38,16 @@ actions: {
     
     async addNote(newNoteContent) {
         let currentDate = new Date().getTime(),
-            id = currentDate.toString()
+            dateString = currentDate.toString()
 
-        let note = {
-            id,
-            content: newNoteContent
-        }
-
-        await setDoc(doc(notesCollectionRef, id), {
-            id: id,
+        const docRef = await addDoc(notesCollectionRef, {
+            date: dateString,
             content: newNoteContent
             })
     },
         
     async deleteNote(idToDelete) {
         await deleteDoc(doc(notesCollectionRef, idToDelete))
-        //this.notes = this.notes.filter(note => note.id !== idToDelete )
     },
 
     async updateNote(id, content) {
@@ -59,8 +55,6 @@ actions: {
         await updateDoc(doc(notesCollectionRef, id), {
             content: content
             })
-
-        //this.notes[index].content = content
     }
 },
 getters: {
