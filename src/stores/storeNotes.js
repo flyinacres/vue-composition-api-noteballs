@@ -1,7 +1,7 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { collection, onSnapshot, setDoc, doc, deleteDoc } from 'firebase/firestore'
+import { collection, onSnapshot, setDoc, doc, deleteDoc, updateDoc  } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
 
 // The collection I will be using for all my firebase work
@@ -50,9 +50,13 @@ actions: {
         //this.notes = this.notes.filter(note => note.id !== idToDelete )
     },
 
-    updateNote(id, content) {
-        let index = this.notes.findIndex(note => note.id === id )
-        this.notes[index].content = content
+    async updateNote(id, content) {
+        //let index = this.notes.findIndex(note => note.id === id )
+        await updateDoc(doc(notesCollectionRef, id), {
+            content: content
+            })
+
+        //this.notes[index].content = content
     }
 },
 getters: {
