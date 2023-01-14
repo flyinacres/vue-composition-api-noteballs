@@ -13,11 +13,13 @@
                 </div>
 
                 <div class="navbar-start">
-                    <button class="button is-small is-info mt-3 ml-3">
+                    <button 
+                        @click="storeAuth.logoutUser"
+                        class="button is-small is-info mt-3 ml-3">
                     Log out
                     </button>
                 </div>
-                
+
                 <a 
                     @click.prevent="showMobileNav = !showMobileNav"
                     role="button" 
@@ -67,12 +69,13 @@
 <script setup>
 import {ref} from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import { useStoreAuth } from '@/stores/storeAuth'
 
 // Need this to access the ref in the template. True for all the refs
 const navbarMenuRef = ref(null)
 const showMobileNav = ref(false)
 const navBarBurger = ref(false)
-
+const storeAuth = useStoreAuth()
 
 onClickOutside(navbarMenuRef, 
     () => { showMobileNav.value = false },
