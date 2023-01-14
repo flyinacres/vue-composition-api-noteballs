@@ -1,11 +1,14 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { collection, onSnapshot, setDoc, doc, deleteDoc, updateDoc  } from 'firebase/firestore'
+import { collection, onSnapshot, 
+    setDoc, doc, deleteDoc, updateDoc, 
+    query, orderBy  } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
 
 // The collection I will be using for all my firebase work
 const notesCollectionRef = collection(db, 'notes')
+const notesCollectionQuery = query(notesCollectionRef, orderBy('id', 'desc'));
 
 export const useStoreNotes = defineStore('storeNotes', {
 state: () => {
@@ -15,7 +18,7 @@ state: () => {
 },
 actions: {
     async getNotes() {
-        const unsubscribe = onSnapshot(notesCollectionRef, (querySnapshot) => {
+        const unsubscribe = onSnapshot(notesCollectionQuery, (querySnapshot) => {
             let notes = []
             querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
@@ -41,6 +44,7 @@ actions: {
         }
 
         await setDoc(doc(notesCollectionRef, id), {
+            id: id,
             content: newNoteContent
             })
     },
