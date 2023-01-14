@@ -1,7 +1,7 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { collection, onSnapshot, setDoc, doc } from 'firebase/firestore'
+import { collection, onSnapshot, setDoc, doc, deleteDoc } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
 
 // The collection I will be using for all my firebase work
@@ -45,8 +45,9 @@ actions: {
             })
     },
         
-    deleteNote(idToDelete) {
-        this.notes = this.notes.filter(note => note.id !== idToDelete )
+    async deleteNote(idToDelete) {
+        await deleteDoc(doc(notesCollectionRef, idToDelete))
+        //this.notes = this.notes.filter(note => note.id !== idToDelete )
     },
 
     updateNote(id, content) {
