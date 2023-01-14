@@ -1,7 +1,7 @@
 // stores/counter.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
 
 
@@ -23,17 +23,20 @@ state: () => {
 },
 actions: {
     async getNotes() {
-        const querySnapshot = await getDocs(collection(db, 'notes'))
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            let id = doc.id
-            let content = doc.data().content
-            let note = {
-                    id,
-                    content: content
-                }
-            this.notes.push(note)
-        });
+        const unsubscribe = onSnapshot(collection(db, 'notes'), (querySnapshot) => {
+            let notes = []
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                let id = doc.id
+                let content = doc.data().content
+                let note = {
+                        id,
+                        content: content
+                    }
+                notes.push(note)
+            })
+            this.notes = notes
+});
     },
     
     addNote(newNoteContent) {
