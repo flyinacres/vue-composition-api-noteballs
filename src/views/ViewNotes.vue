@@ -15,11 +15,17 @@
             </template>
         </AddEditNote>
 
-        <Note 
-            v-for="note in storeNotes.notes" 
-            :key ="storeNotes.notes.id"
-            :note="note"
-        />
+        <progress v-if="!storeNotes.notesLoaded" class="progress is-large is-success" max="100"/>
+
+        <!-- Only show this if the progress bar is not showing -->
+        <template
+            v-else>         
+            <Note 
+                v-for="note in storeNotes.notes" 
+                :key ="storeNotes.notes.id"
+                :note="note"
+            />
+        </template>
     </div>
 </template>
 
