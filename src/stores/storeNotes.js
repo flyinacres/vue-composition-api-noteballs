@@ -48,6 +48,8 @@ actions: {
             
             this.notes = notes
             this.notesLoaded = true
+        }, error => {
+            console.log('snapshot error ' + error.message)
         })
         
     },
