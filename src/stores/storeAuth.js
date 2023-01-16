@@ -18,6 +18,7 @@ actions: {
                 console.log('user logged in ' + user)
             } else {
                 console.log('user logged out ' + user)
+                this.user = {}
             }
         });
     },
