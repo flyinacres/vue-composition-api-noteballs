@@ -7,7 +7,7 @@ import { collection, onSnapshot,
 import { db } from '@/js/firebase.js'
 
 // The collection I will be using for all my firebase work
-const notesCollectionRef = collection(db, 'notes')
+const notesCollectionRef = collection(db, 'users','BqgeTTS4vrM5arM3FL7WXQnqkDo2','notes')
 const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
 
 export const useStoreNotes = defineStore('storeNotes', {
