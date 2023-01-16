@@ -48,6 +48,10 @@ actions: {
         })
         
     },
+
+    clearNotes() {
+        this.notes = []
+    },
     
     async addNote(newNoteContent) {
         let currentDate = new Date().getTime(),
