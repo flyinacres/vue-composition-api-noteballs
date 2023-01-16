@@ -5,10 +5,10 @@ import { collection, onSnapshot,
     addDoc, doc, deleteDoc, updateDoc, 
     query, orderBy  } from 'firebase/firestore'
 import { db } from '@/js/firebase.js'
+import { useStoreAuth } from '@/stores/storeAuth'
 
-// The collection I will be using for all my firebase work
-const notesCollectionRef = collection(db, 'users','BqgeTTS4vrM5arM3FL7WXQnqkDo2','notes')
-const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
+let notesCollectionRef
+let notesCollectionQuery
 
 export const useStoreNotes = defineStore('storeNotes', {
 state: () => {
@@ -18,6 +18,14 @@ state: () => {
     }
 },
 actions: {
+    init() {
+        const storeAuth = useStoreAuth()
+
+        notesCollectionRef = collection(db, 'users', storeAuth.user.id, 'notes')
+        notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'))
+        this.getNotes()
+    },
+
     async getNotes() {
         this.notesLoaded = false
         const unsubscribe = onSnapshot(notesCollectionQuery, (querySnapshot) => {
